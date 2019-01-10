@@ -1,6 +1,6 @@
 # nikke
 
-An old fashioned slot machine whose whole business logic is implemented in a blockchain.
+An old fashioned slot machine whose whole business logic is implemented in a blockchain. You have real odds, believe in pseudo randomization!
 
 ## the odds
 
