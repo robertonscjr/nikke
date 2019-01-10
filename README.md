@@ -13,6 +13,14 @@ An old fashioned slot machine whose whole business logic is implemented in a blo
 | b          | 1 ~ 2           | 8         |
 | a          | 0 ~ 1           | 21        |
 
+## god and the odds
+
+```
+function random() private view returns (uint8) {
+    return uint8(uint256(keccak256(block.timestamp, block.difficulty)) % 100);
+}
+```
+
 ## ./utils
 
 * https://github.com/josex2r/jQuery-SlotMachine
