@@ -1,12 +1,15 @@
-pragma solidity ^0.4.0;                                                         
+pragma solidity ^0.5.0;                                                         
                                                                                 
 contract Nikke {
     address owner;
-    mapping(address => uint) public balance;
     uint amount = 0;
+    uint private ownerBalance = 0;
+    mapping(address => uint) public balance;
     
     function buy() public payable {
-        balance[msg.sender] = msg.value / 10;
+        require(msg.value != 0);
+        
+        balance[msg.sender] = msg.value;
         amount += msg.value;
     }
     
@@ -22,7 +25,6 @@ contract Nikke {
         if(1 < probability && probability <= 2) prize = 8;
         if(2 < probability && probability <= 5) prize = 3;
         if(5 < probability && probability <= 13) prize = 1;
-        if(13 < probability && probability <= 50) balance[msg.sender]++;
         
         if (prize > 0) withdraw(prize);
         
@@ -30,12 +32,15 @@ contract Nikke {
     }
     
     function withdraw(uint8 percentage) private {
-        uint amount_to_transfer = amount * (percentage / 100);
+        uint amount_to_transfer = (amount * percentage) / 100;
         msg.sender.transfer(amount_to_transfer);
         amount -= amount_to_transfer;
     }
-
-    function random() private view returns (uint8) {
-        return uint8(uint256(keccak256(block.timestamp, block.difficulty)) % 100);
+    
+    function random() public view returns (uint8) {
+        bytes32 seed = keccak256(abi.encodePacked(msg.sender, block.coinbase, block.difficulty, block.gaslimit, block.number, msg.sig, msg.data, block.timestamp, block.difficulty, tx.gasprice, tx.origin));
+        
+        return uint8(uint256(seed) % 100); //uint8(uint256(keccak256(block.timestamp, block.difficulty)) % 100);
     }
-}                                                                               
+    
+}
